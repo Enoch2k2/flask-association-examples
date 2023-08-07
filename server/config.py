@@ -12,7 +12,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy()
 
-migrate = Migrate(app, db)
+migrate = Migrate(app, db, render_as_batch=True)
 
 db.init_app(app)
 

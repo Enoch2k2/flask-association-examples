@@ -1,4 +1,5 @@
-from config import app, db
+from config import app
+from models.models import *
 
 
 if __name__ == "__main__":
