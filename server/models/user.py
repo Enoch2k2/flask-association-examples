@@ -11,7 +11,7 @@ class User(db.Model, SerializerMixin):
     songs = db.relationship("Song", back_populates="user")
     artists = db.relationship("Artist", back_populates="user")
 
-    serialize_rules = ('-songs.user', '-artists.user',)
+    serialize_rules = ('-songs.user', '-artists.user')
 
     def __repr__(self):
         return f"<User id={self.id} username={self.username}>"

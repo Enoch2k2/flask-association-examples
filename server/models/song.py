@@ -17,10 +17,17 @@ class Song(db.Model, SerializerMixin):
     genre = db.relationship("Genre", back_populates="songs")
 
     serialize_rules = (
+        '-user_id',
+        '-artist_id',
+        '-genre_id',
         '-user.songs',
+        '-user.artists',
+        '-artist.user_id',
         '-artist.songs',
-        '-artist.user.songs',
-        '-user.artists'
+        '-artist.user',
+        '-artist.genres',
+        '-genre.artists',
+        '-genre.songs'
     )
 
     def __repr__(self):
