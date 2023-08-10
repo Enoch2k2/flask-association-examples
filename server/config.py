@@ -17,7 +17,7 @@ migrate = Migrate(app, db, render_as_batch=True)
 db.init_app(app)
 
 bcrypt = Bcrypt(app)
+CORS(app)
+
 
 api = Api(app)
-
-CORS(app)

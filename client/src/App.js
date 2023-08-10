@@ -1,42 +1,40 @@
 import { useEffect, useState } from "react";
-import Items from "./components/Items";
-import Cart from "./components/Cart";
+import Home from "./components/Home";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Navbar from "./components/Navbar";
+import UserList from "./components/users/UserList";
+import UserForm from "./components/users/UserForm";
+import Errors from "./components/Errors";
 
 const App = () => {
-
-  const [cart, setCart] = useState([])
+  const [users, setUsers] = useState([])
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const storedCart = localStorage.getItem('cart')
-    if (storedCart) {
-      const parsedCart = JSON.parse(storedCart);
-      setCart(parsedCart)
-    } else {
-      localStorage.setItem('cart', JSON.stringify(cart))
-    }
+    fetch('/api/users')
+      .then(resp => resp.json())
+      .then(data => setUsers(data))
   }, [])
 
-  const updateCart = updatedCart => {
-    setCart(updatedCart)
-    localStorage.setItem('cart', JSON.stringify(updatedCart))
-  }
-
-  const addItemToCart = (item) => {
-    // store the item to localStorage
-    updateCart([...cart, item])
-  }
-
-  const checkout = () => {
-    cart.reduce((a, b)  => a + b.price, 0)
-
-    updateCart([])
+  const addUser = data => {
+    if(data.error) {
+      setError(data.error);
+    } else {
+      setUsers([...users, data])
+    }
   }
 
   return (
     <div className="App">
-      <Cart cart={ cart } />
-      <Items addItemToCart={ addItemToCart } />
-      <button onClick={ checkout }>Check Out!</button>
+      <BrowserRouter>
+        <Navbar />
+        <Errors error={error} />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/users" element={<UserList users={ users } />} />
+          <Route path="/users/new" element={<UserForm addUser={ addUser } setError={setError} />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
